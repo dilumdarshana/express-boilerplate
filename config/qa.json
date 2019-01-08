@@ -1,0 +1,36 @@
+{
+    "version": "1.0.0",
+    "api_version_prefix": "/api/v1",
+    "port": 5000,
+    "cors_urls": [
+        "http://localhost:5001"
+    ],
+    "database": {
+        "mongodb": {
+            "host": "localhost",
+            "port": 27020,
+            "name": "lastTable"
+        }
+    },
+    "cache": {
+        "redis": {
+            "host": "localhost",
+            "port": "6379",
+            "name": "redis"
+        }
+    },
+    "twilio": {
+        "number": "+1xxx",
+        "account_sid": "xxxx",
+        "auth_token": "xxx"
+    },
+    "sendgrid": {
+        "api_key": "xxxxx"
+    },
+    "secret_keys": {
+        "login_token": "eabe8511-b1ec-4ab1-982f-0c986ba4d6a6"
+    },
+    "logs": {
+        "cron": "./logs/cron.log"
+    }
+}

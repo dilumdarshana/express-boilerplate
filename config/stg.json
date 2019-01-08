@@ -1,0 +1,15 @@
+{
+    "port": 5000,
+    "cors_urls": ["http://localhost:5001"],
+
+    "database": {
+        "mongodb": {
+            "host": "localhost",
+            "port": 27017,
+            "name": "test"
+        }
+    },
+    "secret_keys": {
+        "login_token": "eabe8511-b1ec-4ab1-982f-0c986ba4d6a6"
+    }
+}
