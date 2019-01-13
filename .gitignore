@@ -1,5 +1,4 @@
 /node_modules
-logs/*
 config/dev.json
 .DS_Store
 npm-debug.log*

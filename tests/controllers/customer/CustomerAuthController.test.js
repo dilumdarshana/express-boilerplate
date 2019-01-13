@@ -93,6 +93,16 @@ describe('CustomerAuthController test', () => {
                     done();
                 });
         });
-        
+        it('should login success', done => {
+            request
+                .post('/api/v1/login')
+                .send({ phone: '+940777610577' })
+                .set('Accept', 'application/json')
+                .end((err, res) => {console.log('res.body.message', res.body.message)
+                    expect(res.status).to.equal(200);
+                    //expect(res.body.message).to.equal('No customer found');
+                    done();
+                });
+        });
     });
 });
