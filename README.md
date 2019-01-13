@@ -1,10 +1,10 @@
-Express boilerplate
+# Express boilerplate
 
-# How to install
+## How to install
 - yarn install
 
-# How run on local
+## How run on local
 - yarn server:dev
 
-# How run unit tests
+## How run unit tests
 - yarn run test
