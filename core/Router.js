@@ -23,7 +23,7 @@ class Router {
     register(routes, middlewares) {
         for (let [verb, path, methodName, routeMiddlewares = []] of routes) {
             verb = verb.toLowerCase();
-            this.router[verb](`${config.api_prefix}${path}`, [...middlewares, ...routeMiddlewares], this[methodName].bind(this))
+            this.router[verb](`${config.api_version_prefix}${path}`, [...middlewares, ...routeMiddlewares], this[methodName].bind(this))
         }
     }
 }

@@ -1,5 +1,5 @@
 import { request, expect } from '../../';
-import { CustomersModel } from '../../../models';
+import { CustomerModel } from '../../../models';
 
 let createdCustomer = [];
 
@@ -9,7 +9,7 @@ describe('CustomerAuthController test', () => {
     });
 
     after(done => {
-        CustomersModel.removeCustomer({ _id: createdCustomer._id })
+        CustomerModel.removeCustomer({ _id: createdCustomer._id })
             .then(() => {
                 done();
             });
@@ -96,11 +96,11 @@ describe('CustomerAuthController test', () => {
         it('should login success', done => {
             request
                 .post('/api/v1/login')
-                .send({ phone: '+940777610577' })
+                .send({ phone: '+94777610577' })
                 .set('Accept', 'application/json')
-                .end((err, res) => {console.log('res.body.message', res.body.message)
+                .end((err, res) => {
                     expect(res.status).to.equal(200);
-                    //expect(res.body.message).to.equal('No customer found');
+                    expect(res.body.message).to.equal('Verification code sent');
                     done();
                 });
         });
