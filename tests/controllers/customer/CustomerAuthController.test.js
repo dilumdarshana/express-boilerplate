@@ -2,6 +2,7 @@ import { request, expect } from '../../';
 import { CustomerModel } from '../../../models';
 
 let createdCustomer = [];
+let customerPIN = null;
 
 describe('CustomerAuthController test', () => {
     before(done => {
@@ -101,6 +102,28 @@ describe('CustomerAuthController test', () => {
                 .end((err, res) => {
                     expect(res.status).to.equal(200);
                     expect(res.body.message).to.equal('Verification code sent');
+                    done();
+                });
+        });
+        it('should validate customer login verification without phone', done => {
+            request
+                .post('/api/v1/verify')
+                .send({ phone: '', code: '2324' })
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body.message).to.equal('No customer found');
+                    done();
+                });
+        });
+        it('should verify customer login PIN', done => {
+            request
+                .post('/api/v1/verify')
+                .send({ phone: '+94777610577', code: '' })
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body.message).to.equal('Invalid verification code');
                     done();
                 });
         });

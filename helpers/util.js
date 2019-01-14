@@ -1,4 +1,4 @@
-import config from 'config';
+'use strict';
 
 module.exports = {
 

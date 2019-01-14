@@ -1,15 +1,22 @@
 import { request, expect } from '../../';
-import { CustomersModel } from '../../../models';
+import { CustomerModel } from '../../../models';
 
 let createdCustomer = [];
 
 describe('CustomerController test', () => {
-    before(done => {
-        done();
+    before( async () => {
+        createdCustomer = await CustomerModel.create({ name: 'Elon Musk', phone: '+94777610577', zip: '12345' });
+
+        await request.post('/api/v1/login').send({ phone: createdCustomer.phone }).set('Accept', 'application/json');
+
+        const token = await request.post('/api/v1/verify').send({ phone: createdCustomer.phone, code: '' }).set('Accept', 'application/json');
+
+
     });
 
-    after(done => {
-        done();
+    after( async () => {
+        //await CustomerModel.removeCustomer({ _id: createdCustomer._id })
+
     });
 
     beforeEach((done) => {

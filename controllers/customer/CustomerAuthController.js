@@ -52,6 +52,11 @@ class CustomerAuthController extends Router {
         }
     }
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     */
     async login(req, res) {
         const { phone } = req.body;
 
@@ -64,7 +69,6 @@ class CustomerAuthController extends Router {
             }
 
             // save verification has on DB
-            //const { secrets: { verify_pin_salt: verifyPinSalt }} = constants;
             const { _id: customerId } = customer;
             const pin = util.generatePinCode();
             const verificationHash = await hashSync(pin, genSaltSync(10), null);
@@ -88,6 +92,11 @@ class CustomerAuthController extends Router {
         }
     }
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     */
     async verify(req, res) {
         const { phone, code } = req.body;
 
@@ -125,6 +134,11 @@ class CustomerAuthController extends Router {
         }
     }
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     */
     async logout(req, res) {
         req.redis.del(`table_user_${req.user.id}`, (err, user) => {
             if (err) {
