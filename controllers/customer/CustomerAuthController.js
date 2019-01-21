@@ -69,7 +69,7 @@ class CustomerAuthController extends Router {
             }
 
             // save verification has on DB
-            const { _id: customerId } = customer;
+            const { _id: customerId, zip, name } = customer;
             const pin = util.generatePinCode();
             const verificationHash = await hashSync(pin, genSaltSync(10), null);
 
@@ -86,7 +86,14 @@ class CustomerAuthController extends Router {
                 messenger.send(message)
             ]);
 
-            res.json({ status: true, message: 'Verification code sent' });
+            const returnData = {
+                id: customerId,
+                phone,
+                zip,
+                name,
+            };
+
+            res.json({ data: returnData, status: true, message: 'Verification code sent' });
         } catch (error) {
             console.log('Error on: CustomerAuthController->login', error)
         }
