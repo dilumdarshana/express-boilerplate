@@ -136,7 +136,7 @@ class CustomerAuthController extends Router {
                 // remove verification hash from db
                 // -- TODO
 
-                res.json({ status: true, message: 'Customer authenticated', data: { token, type: customerType, name, id: customerId }});
+                res.json({ status: true, message: 'Customer authenticated', data: { token, user: { type: customerType, name, id: customerId }} });
             } else {
                 res.json({ status: false, message: 'Invalid verification code' });
             }
