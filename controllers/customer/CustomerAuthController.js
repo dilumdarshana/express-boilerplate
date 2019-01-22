@@ -116,7 +116,7 @@ class CustomerAuthController extends Router {
             }
 
             const { _id: customerId, verification_hash: verificationHash, name } = customer;
-            const { secrets: { jwt_login_auth: jwtLoginAuthSecret }} = constants;
+            const { secrets: { jwt_login_auth: jwtLoginAuthSecret }, user_types: { customer: customerType } } = constants;
 
             const compareResult = await compareSync(code, verificationHash);
 
@@ -126,17 +126,17 @@ class CustomerAuthController extends Router {
                     id: customerId,
                     name,
                     phone,
-                    user_type: 1
+                    user_type: customerType
                 };
 
                 const token = jwt.sign(customerTokenInfo, jwtLoginAuthSecret, { expiresIn: '24h' });
 
-                await req.redis.hmset(`table_user_${customerId}`, 'token', token, 'user_type', 1);
+                await req.redis.hmset(`table_user_${customerId}`, 'token', token, 'user_type', customerType);
 
                 // remove verification hash from db
                 // -- TODO
 
-                res.json({ status: true, message: 'Customer authenticated', data: { token }});
+                res.json({ status: true, message: 'Customer authenticated', data: { token, type: customerType, name, id: customerId }});
             } else {
                 res.json({ status: false, message: 'Invalid verification code' });
             }
