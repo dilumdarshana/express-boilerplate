@@ -13,7 +13,7 @@ class CustomerController extends Router {
         ];
     }
 
-    get middlewares() {
+    get middleware() {
         return [
             passport.authenticate('jwt', {session: false}),
             Authorize('customer')
@@ -26,7 +26,7 @@ class CustomerController extends Router {
      * @param {*} res 
      */
     async myReservations(req, res) {
-        return res.json('myReservations...');
+        return res.json('myReservations.....');
     }
 
     async profile(req, res) {
