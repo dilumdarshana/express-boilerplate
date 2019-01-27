@@ -1,6 +1,7 @@
 {
     "name": "express-boilerplate",
     "version": "1.0.0",
+    "engines" : { "node": ">=10.14.2", "npm": ">=6.4.1" },
     "description": "Express boilerplate",
     "main": "app.js",
     "scripts": {
@@ -45,6 +46,7 @@
         "cross-env": "^5.2.0",
         "mocha": "^5.2.0",
         "nodemon": "^1.18.4",
+        "nyc": "^13.1.0",
         "supertest": "^3.3.0"
     }
 }

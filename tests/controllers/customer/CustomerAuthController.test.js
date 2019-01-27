@@ -1,7 +1,8 @@
 import { request, expect } from '../../';
-import { CustomersModel } from '../../../models';
+import { CustomerModel } from '../../../models';
 
 let createdCustomer = [];
+let customerPIN = null;
 
 describe('CustomerAuthController test', () => {
     before(done => {
@@ -9,7 +10,7 @@ describe('CustomerAuthController test', () => {
     });
 
     after(done => {
-        CustomersModel.removeCustomer({ _id: createdCustomer._id })
+        CustomerModel.removeCustomer({ _id: createdCustomer._id })
             .then(() => {
                 done();
             });
@@ -93,6 +94,38 @@ describe('CustomerAuthController test', () => {
                     done();
                 });
         });
-        
+        it('should login success', done => {
+            request
+                .post('/api/v1/login')
+                .send({ phone: '+94777610577' })
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body.message).to.equal('Verification code sent');
+                    done();
+                });
+        });
+        it('should validate customer login verification without phone', done => {
+            request
+                .post('/api/v1/verify')
+                .send({ phone: '', code: '2324' })
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body.message).to.equal('No customer found');
+                    done();
+                });
+        });
+        it('should verify customer login PIN', done => {
+            request
+                .post('/api/v1/verify')
+                .send({ phone: '+94777610577', code: '' })
+                .set('Accept', 'application/json')
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body.message).to.equal('Invalid verification code');
+                    done();
+                });
+        });
     });
 });

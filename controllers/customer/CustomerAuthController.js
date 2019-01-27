@@ -20,7 +20,7 @@ class CustomerAuthController extends Router {
             ['POST', '/signup', 'signUp', [expressJoi(validations.customer.signUp)]],
             ['POST', '/login', 'login'],
             ['GET', '/logout', 'logout', [passport.authenticate('jwt', {session: false}), Authorize()]],
-            ['POST', '/verify', 'verify'],
+            ['POST', '/verify', 'verify', [expressJoi(validations.customer.verify)]],
         ];
     }
 
@@ -52,6 +52,11 @@ class CustomerAuthController extends Router {
         }
     }
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     */
     async login(req, res) {
         const { phone } = req.body;
 
@@ -64,8 +69,7 @@ class CustomerAuthController extends Router {
             }
 
             // save verification has on DB
-            //const { secrets: { verify_pin_salt: verifyPinSalt }} = constants;
-            const { _id: customerId } = customer;
+            const { _id: customerId, zip, name } = customer;
             const pin = util.generatePinCode();
             const verificationHash = await hashSync(pin, genSaltSync(10), null);
 
@@ -82,49 +86,70 @@ class CustomerAuthController extends Router {
                 messenger.send(message)
             ]);
 
-            res.json({ status: true, message: 'Verification code sent' });
+            const returnData = {
+                id: customerId,
+                phone,
+                zip,
+                name,
+            };
+
+            res.json({ data: returnData, status: true, message: 'Verification code sent' });
         } catch (error) {
             console.log('Error on: CustomerAuthController->login', error)
         }
     }
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     */
     async verify(req, res) {
         const { phone, code } = req.body;
 
-        const customer = await CustomerModel.findOne({ phone });
+        try {
+            const customer = await CustomerModel.findOne({ phone });
 
-        // validations
-        if (customer === null) {
-            return res.json({ status: false, message: 'No customer found' });
-        }
+            // validations
+            if (customer === null) {
+                return res.json({ status: false, message: 'No customer found' });
+            }
 
-        const { _id: customerId, verification_hash: verificationHash, name } = customer;
-        const { secrets: { jwt_login_auth: jwtLoginAuthSecret }} = constants;
+            const { _id: customerId, verification_hash: verificationHash, name } = customer;
+            const { secrets: { jwt_login_auth: jwtLoginAuthSecret }, user_types: { customer: customerType } } = constants;
 
-        const compareResult = await compareSync(code, verificationHash);
+            const compareResult = await compareSync(code, verificationHash);
 
-        if (compareResult) {
-            // generate user token
-            const customerTokenInfo = {
-                id: customerId,
-                name,
-                phone,
-                user_type: 1
-            };
+            if (compareResult) {
+                // generate user token
+                const customerTokenInfo = {
+                    id: customerId,
+                    name,
+                    phone,
+                    user_type: customerType
+                };
 
-            const token = jwt.sign(customerTokenInfo, jwtLoginAuthSecret, { expiresIn: '24h' });
+                const token = jwt.sign(customerTokenInfo, jwtLoginAuthSecret, { expiresIn: '24h' });
 
-            await req.redis.hmset(`table_user_${customerId}`, 'token', token, 'user_type', 1);
+                await req.redis.hmset(`table_user_${customerId}`, 'token', token, 'user_type', customerType);
 
-            // remove verification hash from db
-            // -- TODO
+                // remove verification hash from db
+                // -- TODO
 
-            res.json({ status: true, message: 'Customer authenticated', token });
-        } else {
-            res.json({ status: false, message: 'Invalid verification code' });
+                res.json({ status: true, message: 'Customer authenticated', data: { token, user: { type: customerType, name, id: customerId }} });
+            } else {
+                res.json({ status: false, message: 'Invalid verification code' });
+            }
+        } catch(error) {
+            console.log('Error on: CustomerAuthController->verify', error)
         }
     }
 
+    /**
+     * 
+     * @param {*} req 
+     * @param {*} res 
+     */
     async logout(req, res) {
         req.redis.del(`table_user_${req.user.id}`, (err, user) => {
             if (err) {

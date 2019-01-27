@@ -9,10 +9,10 @@ const config = require('config');
 class Router {
     constructor() {
         this.router = express.Router();
-        this.register(this.routes, this.middlewares);
+        this.register(this.routes, this.middleware);
     }
 
-    get middlewares() {
+    get middleware() {
         return [];
     }
 
@@ -20,10 +20,10 @@ class Router {
         return [];
     }
 
-    register(routes, middlewares) {
-        for (let [verb, path, methodName, routeMiddlewares = []] of routes) {
+    register(routes, middleware) {
+        for (let [verb, path, methodName, routeMiddleware = []] of routes) {
             verb = verb.toLowerCase();
-            this.router[verb](`${config.api_prefix}${path}`, [...middlewares, ...routeMiddlewares], this[methodName].bind(this))
+            this.router[verb](`${config.api_version_prefix}${path}`, [...middleware, ...routeMiddleware], this[methodName].bind(this))
         }
     }
 }
