@@ -1,5 +1,3 @@
-'use strict';
-
 const express = require('express');
 const config = require('config');
 
@@ -23,7 +21,7 @@ class Router {
     register(routes, middleware) {
         for (let [verb, path, methodName, routeMiddleware = []] of routes) {
             verb = verb.toLowerCase();
-            this.router[verb](`${config.api_version_prefix}${path}`, [...middleware, ...routeMiddleware], this[methodName].bind(this))
+            this.router[verb](`${config.api_version_prefix}${path}`, [...middleware, ...routeMiddleware], this[methodName].bind(this));
         }
     }
 }

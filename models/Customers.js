@@ -2,37 +2,37 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-//mongoose.set('useCreateIndex', true);
+// mongoose.set('useCreateIndex', true);
 
 const CustomersSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     phone: {
         type: String,
-        required: true
+        required: true,
     },
     zip: {
         type: String,
-        required: true
+        required: true,
     },
     verification_hash: {
         type: String,
-        default: null
+        default: null,
     },
     active: {
         type: Boolean,
-        default: true
+        default: true,
     },
     created_at: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     updated_at: {
         type: Date,
-        default: Date.now
-    }
+        default: Date.now,
+    },
 }, { collection: 'customers' });
 
 /**
@@ -48,12 +48,12 @@ CustomersSchema.statics.removeCustomer = function (filter) {
             if (error) {
                 reject({
                     status: 400,
-                    error
+                    error,
                 });
             } else {
                 resolve({
                     status: 200,
-                    result
+                    result,
                 });
             }
         });

@@ -1,5 +1,3 @@
-'use strict';
-
 import cron from 'node-cron';
 import sampleSchedule from './sampleSchedule';
 
@@ -10,5 +8,5 @@ module.exports = {
         // cron.schedule('* * * * *', () => {
         //     sampleSchedule.handle();
         // });
-    }
+    },
 };

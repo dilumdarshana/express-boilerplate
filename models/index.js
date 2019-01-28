@@ -1,5 +1,5 @@
 import CustomerModel from './Customers';
 
-export {
-    CustomerModel
+module.exports = {
+    CustomerModel,
 };

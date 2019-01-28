@@ -1,13 +1,18 @@
 {
     "name": "express-boilerplate",
     "version": "1.0.0",
-    "engines" : { "node": ">=10.14.2", "npm": ">=6.4.1" },
+    "engines": {
+        "node": ">=10.14.2",
+        "npm": ">=6.4.1"
+    },
     "description": "Express boilerplate",
     "main": "app.js",
     "scripts": {
         "server:dev": "cross-env NODE_ENV=dev nodemon --exec npm run nodeserver",
         "nodeserver": "babel-node app.js",
-        "test": "cross-env NODE_ENV=dev mocha --recursive --require babel-register --require babel-polyfill --exit tests"
+        "test": "cross-env NODE_ENV=dev mocha --recursive --require babel-register --require babel-polyfill --exit tests",
+        "lint": "eslint --env browser .",
+        "lint:fix": "eslint --fix ."
     },
     "author": "Dilum Darshana",
     "license": "ISC",
@@ -40,10 +45,16 @@
     "devDependencies": {
         "babel": "^6.23.0",
         "babel-cli": "^6.26.0",
+        "babel-eslint": "^10.0.1",
         "babel-preset-es2015": "^6.24.1",
         "babel-preset-stage-0": "^6.24.1",
         "chai": "^4.2.0",
         "cross-env": "^5.2.0",
+        "eslint": "^5.12.1",
+        "eslint-config-airbnb": "^17.1.0",
+        "eslint-plugin-import": "^2.15.0",
+        "eslint-plugin-jsx-a11y": "^6.2.0",
+        "eslint-plugin-react": "^7.12.4",
         "mocha": "^5.2.0",
         "nodemon": "^1.18.4",
         "nyc": "^13.1.0",

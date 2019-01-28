@@ -1,5 +1,3 @@
-'use strict';
-
 import { hashSync, compareSync, genSaltSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
 import expressJoi from 'express-joi-validator';
@@ -14,20 +12,19 @@ import Authorize from '../../middlewares/Authorization';
 import { CustomerModel } from '../../models';
 
 class CustomerAuthController extends Router {
-
     get routes() {
         return [
             ['POST', '/signup', 'signUp', [expressJoi(validations.customer.signUp)]],
             ['POST', '/login', 'login'],
-            ['GET', '/logout', 'logout', [passport.authenticate('jwt', {session: false}), Authorize()]],
+            ['GET', '/logout', 'logout', [passport.authenticate('jwt', { session: false }), Authorize()]],
             ['POST', '/verify', 'verify', [expressJoi(validations.customer.verify)]],
         ];
     }
 
     /**
-     * 
-     * @param {*} req 
-     * @param {*} res 
+     *
+     * @param {*} req
+     * @param {*} res
      */
     async signUp(req, res) {
         const { name, phone, zip } = req.body;
@@ -42,7 +39,7 @@ class CustomerAuthController extends Router {
             const customer = {
                 name,
                 phone,
-                zip
+                zip,
             };
             const createdUser = await CustomerModel.create(customer);
 
@@ -53,9 +50,9 @@ class CustomerAuthController extends Router {
     }
 
     /**
-     * 
-     * @param {*} req 
-     * @param {*} res 
+     *
+     * @param {*} req
+     * @param {*} res
      */
     async login(req, res) {
         const { phone } = req.body;
@@ -78,12 +75,12 @@ class CustomerAuthController extends Router {
             // send verification message to customer
             const message = {
                 message: `Here is your PIN code: ${pin}`,
-                phone
+                phone,
             };
 
             await Promise.all([
                 CustomerModel.updateOne({ _id: customerId }, { verification_hash: verificationHash }),
-                messenger.send(message)
+                messenger.send(message),
             ]);
 
             const returnData = {
@@ -95,14 +92,14 @@ class CustomerAuthController extends Router {
 
             res.json({ data: returnData, status: true, message: 'Verification code sent' });
         } catch (error) {
-            console.log('Error on: CustomerAuthController->login', error)
+            console.log('Error on: CustomerAuthController->login', error);
         }
     }
 
     /**
-     * 
-     * @param {*} req 
-     * @param {*} res 
+     *
+     * @param {*} req
+     * @param {*} res
      */
     async verify(req, res) {
         const { phone, code } = req.body;
@@ -126,7 +123,7 @@ class CustomerAuthController extends Router {
                     id: customerId,
                     name,
                     phone,
-                    user_type: customerType
+                    user_type: customerType,
                 };
 
                 const token = jwt.sign(customerTokenInfo, jwtLoginAuthSecret, { expiresIn: '24h' });
@@ -136,29 +133,29 @@ class CustomerAuthController extends Router {
                 // remove verification hash from db
                 // -- TODO
 
-                res.json({ status: true, message: 'Customer authenticated', data: { token, user: { type: customerType, name, id: customerId }} });
+                res.json({ status: true, message: 'Customer authenticated', data: { token, user: { type: customerType, name, id: customerId } } });
             } else {
                 res.json({ status: false, message: 'Invalid verification code' });
             }
-        } catch(error) {
-            console.log('Error on: CustomerAuthController->verify', error)
+        } catch (error) {
+            console.log('Error on: CustomerAuthController->verify', error);
         }
     }
 
     /**
-     * 
-     * @param {*} req 
-     * @param {*} res 
+     *
+     * @param {*} req
+     * @param {*} res
      */
     async logout(req, res) {
-        req.redis.del(`table_user_${req.user.id}`, (err, user) => {
-            if (err) {
+        req.redis.del(`table_user_${req.user.id}`, (error, user) => {
+            if (error) {
                 req.log.error(error);
                 res.boom.badImplementation('Can not delete cached user data');
             } else {
                 return res.json({
                     status: true,
-                    message: 'User successfully logged out'
+                    message: 'User successfully logged out',
                 });
             }
         });

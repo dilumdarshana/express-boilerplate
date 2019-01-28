@@ -1,11 +1,8 @@
-'use strict';
-
-const passport = require('passport');
+import passport from 'passport';
 import Router from '../../core/Router';
 import Authorize from '../../middlewares/Authorization';
 
 class CustomerController extends Router {
-
     get routes() {
         return [
             ['GET', '/my-reservations', 'myReservations'],
@@ -15,22 +12,22 @@ class CustomerController extends Router {
 
     get middleware() {
         return [
-            passport.authenticate('jwt', {session: false}),
-            Authorize('customer')
+            passport.authenticate('jwt', { session: false }),
+            Authorize('customer'),
         ];
     }
 
     /**
-     * 
-     * @param {*} req 
-     * @param {*} res 
+     *
+     * @param {*} req
+     * @param {*} res
      */
     async myReservations(req, res) {
         return res.json('myReservations.....');
     }
 
     async profile(req, res) {
-        return res.json('profile....')
+        return res.json('profile....');
     }
 }
 

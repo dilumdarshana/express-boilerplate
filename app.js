@@ -1,5 +1,3 @@
-'use strict';
-
 import express from 'express';
 import config from 'config';
 import bodyParser from 'body-parser';
@@ -9,16 +7,18 @@ import cors from 'cors';
 import mongodb from './lib/mongoDB';
 import messenger from './lib/messenger';
 import mailer from './lib/mailer';
-import redisClient from './middlewares/redisClient';
+import redisClient from './middlewares/RedisClient';
 
 import schedules from './schedules';
 import passportStrategies from './core/PassportStrategies';
 
+// import routers
+import Routes from './routes';
+
 // create express app
 const app = express();
 
-//{ origin: config.cors_urls }
-app.use(cors());
+app.use(cors({ origin: config.cors_urls }));
 
 app.use(expressBoom());
 
@@ -43,17 +43,14 @@ passportStrategies.init();
 // urlencoded - this type of body will be convert
 // extended - which need to allow rich data or simple data
 app.use(bodyParser.urlencoded({
-    extended: true
+    extended: true,
 }));
 // body-parser use to convert http post data to json
 app.use(bodyParser.json());
 
-// import routers
-import Routes from './routes';
-
 Routes(app);
 
-//catch 404 and forwarding to error handler
+// catch 404 and forwarding to error handler
 app.use((req, res, next) => {
     res.boom.notFound();
     next();
@@ -69,14 +66,12 @@ app.use((error, req, res, next) => {
             status: {
                 message: 'Internal server error, Please contact Support.',
                 code: 500,
-            }
+            },
         });
         if (req.log) {
             req.log.error(error);
         } else {
-            //const log = Bunyan.createLogger(loggerOptions.options());
-            //log.error(error);
-            console.log(error)
+            console.log(error);
         }
         res.end();
     }

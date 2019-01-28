@@ -6,12 +6,12 @@ module.exports = {
             name: joi.string().required().label('Name'),
             phone: joi.string().required(),
             zip: joi.string().required(),
-        }
+        },
     },
     verify: {
         body: {
             phone: joi.string().required(),
             code: joi.string().required(),
-        }
-    }
+        },
+    },
 };

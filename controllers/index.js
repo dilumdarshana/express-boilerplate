@@ -1,7 +1,5 @@
-'use strict';
-
-import CustomerController from '../controllers/customer/CustomerController';
-import CustomerAuthController from '../controllers/customer/CustomerAuthController';
+import CustomerController from './customer/CustomerController';
+import CustomerAuthController from './customer/CustomerAuthController';
 
 export {
     CustomerController,

@@ -1,15 +1,14 @@
-import { request, expect } from '../../';
+import { request, expect } from '../..';
 import { CustomerModel } from '../../../models';
 
 let createdCustomer = [];
-let customerPIN = null;
 
 describe('CustomerAuthController test', () => {
-    before(done => {
+    before((done) => {
         done();
     });
 
-    after(done => {
+    after((done) => {
         CustomerModel.removeCustomer({ _id: createdCustomer._id })
             .then(() => {
                 done();
@@ -27,7 +26,7 @@ describe('CustomerAuthController test', () => {
     });
 
     describe('create customer test --', () => {
-        it('should validate required field name', done => {
+        it('should validate required field name', (done) => {
             request
                 .post('/api/v1/signup')
                 .send({ phone: '+94777610577', zip: '12345' })
@@ -37,7 +36,7 @@ describe('CustomerAuthController test', () => {
                     done();
                 });
         });
-        it('should validate required field phone', done => {
+        it('should validate required field phone', (done) => {
             request
                 .post('/api/v1/signup')
                 .send({ name: 'Alex', zip: '12345' })
@@ -47,7 +46,7 @@ describe('CustomerAuthController test', () => {
                     done();
                 });
         });
-        it('should create a new customer', done => {
+        it('should create a new customer', (done) => {
             request
                 .post('/api/v1/signup')
                 .send({ name: 'Alex Domino', phone: '+94777610577', zip: '12345' })
@@ -58,7 +57,7 @@ describe('CustomerAuthController test', () => {
                     done();
                 });
         });
-        it('should validate duplicate customers', done => {
+        it('should validate duplicate customers', (done) => {
             request
                 .post('/api/v1/signup')
                 .send({ name: 'Alex Domino', phone: '+94777610577', zip: '12345' })
@@ -72,10 +71,10 @@ describe('CustomerAuthController test', () => {
     });
 
     describe('customer login test --', () => {
-        it('should not allow login without phone', done => {
+        it('should not allow login without phone', (done) => {
             request
                 .post('/api/v1/login')
-                .send({}) // phone: createdCustomer.phone 
+                .send({}) // phone: createdCustomer.phone
                 .set('Accept', 'application/json')
                 .end((err, res) => {
                     expect(res.status).to.equal(200);
@@ -83,7 +82,7 @@ describe('CustomerAuthController test', () => {
                     done();
                 });
         });
-        it('should validate phone number', done => {
+        it('should validate phone number', (done) => {
             request
                 .post('/api/v1/login')
                 .send({ phone: '34343434343' })
@@ -94,7 +93,7 @@ describe('CustomerAuthController test', () => {
                     done();
                 });
         });
-        it('should login success', done => {
+        it('should login success', (done) => {
             request
                 .post('/api/v1/login')
                 .send({ phone: '+94777610577' })
@@ -105,25 +104,25 @@ describe('CustomerAuthController test', () => {
                     done();
                 });
         });
-        it('should validate customer login verification without phone', done => {
+        it('should validate customer login verification without phone', (done) => {
             request
                 .post('/api/v1/verify')
                 .send({ phone: '', code: '2324' })
                 .set('Accept', 'application/json')
                 .end((err, res) => {
-                    expect(res.status).to.equal(200);
-                    expect(res.body.message).to.equal('No customer found');
+                    expect(res.status).to.equal(422);
+                    expect(res.body.message).to.equal('"phone" is not allowed to be empty');
                     done();
                 });
         });
-        it('should verify customer login PIN', done => {
+        it('should verify customer login PIN', (done) => {
             request
                 .post('/api/v1/verify')
                 .send({ phone: '+94777610577', code: '' })
                 .set('Accept', 'application/json')
                 .end((err, res) => {
-                    expect(res.status).to.equal(200);
-                    expect(res.body.message).to.equal('Invalid verification code');
+                    expect(res.status).to.equal(422);
+                    expect(res.body.message).to.equal('"code" is not allowed to be empty');
                     done();
                 });
         });
