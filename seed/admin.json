@@ -1,0 +1,12 @@
+{
+    "admin": {
+        "model": "Administrator",
+        "documents": [
+            {
+                "name": "super",
+                "email": "dilum.dar@gmail.com",
+                "password_hash": "dfdfdfdfdfdf"
+            }
+        ]
+    }
+}

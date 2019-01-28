@@ -8,6 +8,7 @@
     "description": "Express boilerplate",
     "main": "app.js",
     "scripts": {
+        "seed:dev": "cross-env NODE_ENV=dev babel-node ./seed/",
         "server:dev": "cross-env NODE_ENV=dev nodemon --exec npm run nodeserver",
         "nodeserver": "babel-node app.js",
         "test": "cross-env NODE_ENV=dev mocha --recursive --require babel-register --require babel-polyfill --exit tests",
@@ -33,6 +34,7 @@
         "jsonwebtoken": "^8.4.0",
         "lodash": "^4.17.11",
         "mongoose": "^5.4.0",
+        "mongoose-seed": "^0.5.1",
         "movement": "^0.0.13",
         "node-cron": "^2.0.3",
         "passport": "^0.4.0",
