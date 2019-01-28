@@ -1,5 +1,5 @@
-const express = require('express');
-const config = require('config');
+import express from 'express';
+import config from 'config';
 
 /**
  * Router base class; all routers should extends from this

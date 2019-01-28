@@ -1,6 +1,7 @@
 import {
     CustomerAuthController,
     CustomerController,
+    AdminAuthController,
 } from './controllers';
 
 export default (app) => {
@@ -9,4 +10,5 @@ export default (app) => {
     app.use(new CustomerController().router);
 
     // admin controllers
+    app.use(new AdminAuthController().router);
 };
