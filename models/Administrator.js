@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { hashSync, compare, genSaltSync } from 'bcrypt-nodejs';
 
 const { Schema } = mongoose;
 
@@ -8,9 +9,8 @@ const AdministratorSchema = new Schema({
     },
     email: {
         type: String,
-        unique: true,
     },
-    password_hash: {
+    password: {
         type: String,
         default: null,
     },
@@ -27,5 +27,32 @@ const AdministratorSchema = new Schema({
         default: Date.now,
     },
 }, { collection: 'administrator' });
+
+AdministratorSchema.pre('save', async function (next) {
+    const user = this;
+    const salt = genSaltSync(10);
+    const hash = await hashSync(user.password, salt);
+
+    user.password = hash;
+    next();
+});
+
+AdministratorSchema.statics.comparePassword = function (password, passwordDB) {
+    return new Promise((resolve, reject) => {
+        compare(password, passwordDB, (error, matches) => {
+            if (error) {
+                reject({
+                    status: 400,
+                    error
+                });
+            } else {
+                resolve({
+                    status: 200,
+                    result: matches
+                });
+            }
+        });
+    });
+};
 
 export default mongoose.model('Administrator', AdministratorSchema);
