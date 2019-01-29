@@ -6,19 +6,36 @@ services:
         volumes:
             - ./:/app
         working_dir: /app
+        user: "node"
+        environment:
+            - NODE_ENV=dev
         depends_on:
             - lst_mongo
             - lst_redis
         ports:
             - 5000:5000
         command: yarn server:dev
+    lst_web:
+        container_name: lst_node_web
+        image: node:10.15.0
+        volumes:
+            - ../xxxx-WEB:/app
+        working_dir: /app
+        environment:
+            - NODE_ENV=development
+            - PORT=5001
+        depends_on:
+            - lst_node
+        ports:
+            - 5001:5001
+        command: yarn start
     lst_mongo:
         container_name: lst_mongo
         image: mongo:4.0.5
         expose:
             - 27017
         ports:
-            - '27020:27017'
+            - '27021:27017'
     lst_redis:
         container_name: lst_redis
         image: redis
