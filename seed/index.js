@@ -11,13 +11,13 @@ seeder.connect(dbPath, { useNewUrlParser: true, useCreateIndex: true }, () => {
         path.join(__dirname, '../models/Administrator'),
     ]);
 
-    seeder.clearModels(['Administrator'], async () => {
+    seeder.clearModels(['Administrator'], () => {
         try {
-            await seeder.populateModels(adminData);
+            seeder.populateModels(adminData, (err) => {
+                console.log('Seeded successfully');
 
-            console.log('Seeded successfully');
-
-            process.exit();
+                process.exit()
+            });
         } catch (ex) {
             console.error(`Error occurred on ${ex.seed}`, ex.error);
             process.exit();
