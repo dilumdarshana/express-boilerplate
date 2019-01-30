@@ -1,10 +1,10 @@
 # Express boilerplate
 
-## How to install
-- yarn install
+## Seeds
+- docker-compose run --service-ports lst_node yarn seed:dev
 
 ## How run on local
-- yarn server:dev
+- docker-compose run --service-ports lst_node yarn server:dev
 
 ## How run unit tests
-- yarn run test
+- docker-compose run --service-ports lst_node yarn test
