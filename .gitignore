@@ -1,5 +1,5 @@
 /node_modules
-logs/*
+!logs/*
 config/dev.json
 .DS_Store
 npm-debug.log*
@@ -7,4 +7,3 @@ yarn-debug.log*
 yarn-error.log*
 package-lock.json
 .nyc_output/
-/client

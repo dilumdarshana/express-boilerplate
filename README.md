@@ -1,5 +1,8 @@
 # Express boilerplate
 
+## Install dependancy
+- docker-compose run --service-ports lst_node yarn install
+
 ## Seeds
 - docker-compose run --service-ports lst_node yarn seed:dev
 
