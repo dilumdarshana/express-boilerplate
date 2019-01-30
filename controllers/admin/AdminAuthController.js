@@ -25,7 +25,6 @@ class AdminAuthController extends Router {
     async login(req, res) {
         passport.authenticate('local', { session: false }, (err, user, info) => {
             if (err) {
-                req.log.error(err);
                 res.boom.badRequest(JSON.stringify(err));
               } else {
 
@@ -71,7 +70,7 @@ class AdminAuthController extends Router {
     }
 
     async new(req, res) {
-        AdministratorModel.create({ name: "apache", email: "test", password: "123"});
+        AdministratorModel.create({ name: "apache", email: "dilum.dar@gmail.com", password: "123"});
         res.json('done')
     }
 }
