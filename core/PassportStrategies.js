@@ -25,25 +25,23 @@ module.exports = {
             usernameField: 'email',
             passwordField: 'password',
         },
-            async (email, password, done) => {
-                try {
-                    const user = await AdministratorModel.findOne({ email });
+        async (email, password, done) => {
+            try {
+                const user = await AdministratorModel.findOne({ email });
 
-                    if (!user) {
-                        return done('Username or password is incorrect. Try again');
-                    }
-                    const { password: passwordDB } = user;
-                    const match = await AdministratorModel.comparePassword(password, passwordDB);
-
-                    if (!match.result) {
-                        return done('Username or password is incorrect. Try again');
-                    } else {
-                        return done(null, user, { message: 'Logged In Successfully' });
-                    }
-                } catch(error) {
-                    return done('Internal server error.');
+                if (!user) {
+                    return done('Username or password is incorrect. Try again');
                 }
+                const { password: passwordDB } = user;
+                const match = await AdministratorModel.comparePassword(password, passwordDB);
+
+                if (!match.result) {
+                    return done('Username or password is incorrect. Try again');
+                }
+                return done(null, user, { message: 'Logged In Successfully' });
+            } catch (error) {
+                return done('Internal server error.');
             }
-        ));
+        }));
     },
 };

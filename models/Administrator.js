@@ -43,12 +43,12 @@ AdministratorSchema.statics.comparePassword = function (password, passwordDB) {
             if (error) {
                 reject({
                     status: 400,
-                    error
+                    error,
                 });
             } else {
                 resolve({
                     status: 200,
-                    result: matches
+                    result: matches,
                 });
             }
         });

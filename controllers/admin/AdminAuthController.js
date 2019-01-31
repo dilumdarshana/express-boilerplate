@@ -26,9 +26,8 @@ class AdminAuthController extends Router {
         passport.authenticate('local', { session: false }, (err, user, info) => {
             if (err) {
                 res.boom.badRequest(JSON.stringify(err));
-              } else {
-
-                req.login(user, { session: false }, async (err) => {
+            } else {
+                req.login(user, { session: false }, async (loginError) => {
                     const { secrets: { jwt_login_auth: jwtLoginAuthSecret }, user_types: { admin: userType } } = constants;
                     const { _id: userId, name } = user;
                     const tokenInfo = {
@@ -37,16 +36,16 @@ class AdminAuthController extends Router {
                         user_type: userType,
                     };
                     const token = jwt.sign(tokenInfo, jwtLoginAuthSecret, { expiresIn: '24h' });
-                    
+
                     try {
                         await req.redis.hmset(`table_user_${userId}`, 'token', token, 'user_type', userType);
-                    } catch(error) {
+                    } catch (error) {
                         res.json({ status: false, message: error.message });
                     }
 
                     res.json({ status: true, message: 'Admin User authenticated', data: { token, user: { type: userType, name, id: userId } } });
                 });
-              }
+            }
         })(req, res);
     }
 
@@ -70,8 +69,8 @@ class AdminAuthController extends Router {
     }
 
     async new(req, res) {
-        AdministratorModel.create({ name: "apache", email: "dilum.dar@gmail.com", password: "123"});
-        res.json('done')
+        AdministratorModel.create({ name: 'apache', email: 'dilum.dar@gmail.com', password: '123' });
+        res.json('done');
     }
 }
 
